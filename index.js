@@ -16,6 +16,7 @@ document.addEventListener("keydown", (e) => {
 
 document.getElementById('start').addEventListener('click', function () {
   if (started == false) {
+    count = 0;
     upLevel();
     started = true;
   }
