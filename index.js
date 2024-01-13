@@ -14,6 +14,14 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+document.getElementById('start').addEventListener('click', function () {
+  if (started == false) {
+    upLevel();
+    started = true;
+  }
+})
+
+
 function upLevel() {
   level++;
   document.querySelector("h2").innerText = `Level ${level}`;
@@ -52,7 +60,7 @@ function userSelect() {
     } else {
       document.querySelector(
         "h2"
-      ).innerHTML = `GAME OVER! Your score was ${level} <br> Press Any key to restart`;
+      ).innerHTML = `GAME OVER! Your score was <span class='result'>${level}</span><br> Press Any key to restart`;
       gameSeq = [];
       userSeq = [];
       level = 0;
