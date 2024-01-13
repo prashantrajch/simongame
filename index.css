@@ -1,0 +1,39 @@
+body{
+text-align: center;
+}
+
+.container{
+    width: 360px;
+    margin: 0 auto;  
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.box{
+    width: 150px;
+    height: 150px;
+    border: 8px solid black;
+    border-radius: 20px;
+}
+
+.green{
+    background-color: green;
+}
+
+.red{
+    background-color: red;
+}
+
+.yellow{
+    background-color: yellow;
+}
+
+.blue{
+    background-color: blue;
+}
+
+.active{
+    background-color: #fff;
+}
