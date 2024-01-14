@@ -77,7 +77,6 @@ function flashBox(randnum) {
 function userSelect() {
   this.classList.add('active');
   let checkAns;
-  count++;
   userSeq.push(this.id);
 
   if(this.id == 'red'){
@@ -97,6 +96,7 @@ function userSelect() {
   this.classList.remove('active');
   }, 300);
   setTimeout(() => {
+    count++;
     if(count == level){
       checkAns = check();
       if (checkAns) {
