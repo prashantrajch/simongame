@@ -1,29 +1,15 @@
 let gameSeq = [];
 let userSeq = [];
 
-// Sound files
-var greenBoop = new Audio(
-  "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
-);
-var redBoop = new Audio(
-  "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
-);
-var yellowBoop = new Audio(
-  "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
-);
-var blueBoop = new Audio(
-  "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
-);
-var scream = new Audio(
-  "http://soundbible.com/mp3/Female_Scream_Horror-NeoPhyTe-138499973.mp3"
-);
-var cheer = new Audio(
-  "http://soundbible.com/mp3/Kids%20Cheering-SoundBible.com-681813822.mp3"
-);
+let hgScore = 0;
 
 let started = false;
 let level = 0;
 let count = 0;
+
+var scream = new Audio(
+  "http://soundbible.com/mp3/Female_Scream_Horror-NeoPhyTe-138499973.mp3"
+);
 
 let boxes = document.querySelectorAll(".box");
 
@@ -37,22 +23,15 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.getElementById("start").addEventListener("click", function (e) {
-  console.log(e.target.innerText)
   if (started == false) {
-    e.target.innerText = 'Reset';
+    e.target.innerText = "Reset";
     count = 0;
     gameSeq = [];
     upLevel();
     started = true;
-  }
-  else if(this.innerText == 'Reset'){
-    e.target.innerText = 'Start';
-    gameSeq = [];
-    userSeq = [];
-    count = 0;
-    level = 0;
-    document.querySelector("h2").innerText = `Level ${level}`;
-    started = false;
+  } else if (this.innerText == "Reset") {
+    reset();
+  document.querySelector("h2").innerText = `Level ${level}`;
   }
 });
 
@@ -64,22 +43,13 @@ function upLevel() {
     setTimeout(() => {
       let randomNum = Math.floor(Math.random() * boxes.length);
       flashBox(randomNum);
-    }, 1200 * i);
+    }, 900 * i);
   }
 }
 
 function flashBox(randnum) {
   boxes[randnum].classList.add("active");
-
-  if (boxes[randnum].id == "red") {
-    redBoop.play();
-  } else if (boxes[randnum].id == "green") {
-    greenBoop.play();
-  } else if (boxes[randnum].id == "blue") {
-    blueBoop.play();
-  } else if (boxes[randnum].id == "yellow") {
-    yellowBoop.play();
-  }
+  checkTone(boxes[randnum].id);
 
   setTimeout(() => {
     boxes[randnum].classList.remove("active");
@@ -98,17 +68,7 @@ function userSelect() {
   let checkAns;
   count++;
   userSeq.push(this.id);
-
-
-  if (this.id == "red") {
-    redBoop.play();
-  } else if (this.id == "green") {
-    greenBoop.play();
-  } else if (this.id == "blue") {
-    blueBoop.play();
-  } else if (this.id == "yellow") {
-    yellowBoop.play();
-  }
+  checkTone(this.id);
 
   setTimeout(() => {
     this.classList.remove("active");
@@ -123,17 +83,57 @@ function userSelect() {
           "h2"
         ).innerHTML = `GAME OVER! Your score was <span class='result'>${level}</span><br> Press Any key to restart`;
         scream.play();
-        gameSeq = [];
-        userSeq = [];
-        level = 0;
-        count = 0;
-        document.getElementById('start').innerText = 'Start';
-        started = false;
+        highScore(level);
+        reset();
       }
     }, 600);
   }
 }
 
+function checkTone(id) {
+  // Sound files
+  var greenBoop = new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
+  );
+  var redBoop = new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
+  );
+  var yellowBoop = new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
+  );
+  var blueBoop = new Audio(
+    "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
+  );
+
+  if (id == "red") {
+    redBoop.play();
+  } else if (id == "green") {
+    greenBoop.play();
+  } else if (id == "blue") {
+    blueBoop.play();
+  } else if (id == "yellow") {
+    yellowBoop.play();
+  }
+}
+
+function highScore(num){
+  if(num > hgScore){
+    document.getElementById('highScore').innerHTML = `Your Last High Score is <span class='result'>${num}</span>`;
+  }
+  else{
+    document.getElementById('highScore').innerHTML = `Your Last High Score is <span class='result'>${num}</span>`;
+  }
+}
+
+
+function reset(){
+  gameSeq = [];
+  userSeq = [];
+  level = 0;
+  count = 0;
+  document.getElementById("start").innerText = "Start";
+  started = false;
+}
 function check() {
   for (let i = 0; i < gameSeq.length; i++) {
     if (gameSeq[i] != userSeq[i]) {
