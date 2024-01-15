@@ -1,73 +1,92 @@
 let gameSeq = [];
 let userSeq = [];
 
-
 // Sound files
-var greenBoop = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
-var redBoop = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
-var yellowBoop = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
-var blueBoop = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
-var scream = new Audio("http://soundbible.com/mp3/Female_Scream_Horror-NeoPhyTe-138499973.mp3");
-var cheer = new Audio("http://soundbible.com/mp3/Kids%20Cheering-SoundBible.com-681813822.mp3");
-
-
-
+var greenBoop = new Audio(
+  "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"
+);
+var redBoop = new Audio(
+  "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"
+);
+var yellowBoop = new Audio(
+  "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"
+);
+var blueBoop = new Audio(
+  "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
+);
+var scream = new Audio(
+  "http://soundbible.com/mp3/Female_Scream_Horror-NeoPhyTe-138499973.mp3"
+);
+var cheer = new Audio(
+  "http://soundbible.com/mp3/Kids%20Cheering-SoundBible.com-681813822.mp3"
+);
 
 let started = false;
 let level = 0;
-let count  = 0;
+let count = 0;
 
 let boxes = document.querySelectorAll(".box");
 
 document.addEventListener("keydown", (e) => {
   if (started == false) {
     count = 0;
+    userSeq = [];
     upLevel();
     started = true;
   }
 });
 
-document.getElementById('start').addEventListener('click', function () {
+document.getElementById("start").addEventListener("click", function (e) {
+  console.log(e.target.innerText)
   if (started == false) {
+    e.target.innerText = 'Reset';
     count = 0;
+    gameSeq = [];
     upLevel();
     started = true;
   }
-})
-
+  else if(this.innerText == 'Reset'){
+    e.target.innerText = 'Start';
+    gameSeq = [];
+    userSeq = [];
+    count = 0;
+    level = 0;
+    document.querySelector("h2").innerText = `Level ${level}`;
+    started = false;
+  }
+});
 
 function upLevel() {
   level++;
   document.querySelector("h2").innerText = `Level ${level}`;
-  for(let i = 0; i < level; i++){
+
+  for (let i = 0; i < level; i++) {
     setTimeout(() => {
       let randomNum = Math.floor(Math.random() * boxes.length);
-      flashBox(randomNum); 
-    }, 1000 * i);
+      flashBox(randomNum);
+    }, 1200 * i);
   }
 }
 
 function flashBox(randnum) {
-
   boxes[randnum].classList.add("active");
 
-  if(boxes[randnum].id == 'red'){
+  if (boxes[randnum].id == "red") {
     redBoop.play();
-  }
-  else if(boxes[randnum].id == 'green'){
+  } else if (boxes[randnum].id == "green") {
     greenBoop.play();
-  }
-  else if(boxes[randnum].id == 'blue'){
-    blueBoop.play()
-  }
-  else if(boxes[randnum].id == 'yellow'){
+  } else if (boxes[randnum].id == "blue") {
+    blueBoop.play();
+  } else if (boxes[randnum].id == "yellow") {
     yellowBoop.play();
   }
+
   setTimeout(() => {
     boxes[randnum].classList.remove("active");
   }, 600);
 
   gameSeq.push(boxes[randnum].id);
+  userSeq = [];
 
   boxes.forEach((elm) => {
     elm.addEventListener("click", userSelect);
@@ -75,29 +94,27 @@ function flashBox(randnum) {
 }
 
 function userSelect() {
-  this.classList.add('active');
+  this.classList.add("active");
   let checkAns;
+  count++;
   userSeq.push(this.id);
 
-  if(this.id == 'red'){
+
+  if (this.id == "red") {
     redBoop.play();
-  }
-  else if(this.id == 'green'){
+  } else if (this.id == "green") {
     greenBoop.play();
-  }
-  else if(this.id == 'blue'){
-    blueBoop.play()
-  }
-  else if(this.id == 'yellow'){
+  } else if (this.id == "blue") {
+    blueBoop.play();
+  } else if (this.id == "yellow") {
     yellowBoop.play();
   }
 
   setTimeout(() => {
-  this.classList.remove('active');
+    this.classList.remove("active");
   }, 300);
-  setTimeout(() => {
-    count++;
-    if(count == level){
+  if (count == level) {
+    setTimeout(() => {
       checkAns = check();
       if (checkAns) {
         upLevel();
@@ -110,13 +127,12 @@ function userSelect() {
         userSeq = [];
         level = 0;
         count = 0;
+        document.getElementById('start').innerText = 'Start';
         started = false;
       }
-    }
-  }, 600);
-
+    }, 600);
+  }
 }
-
 
 function check() {
   for (let i = 0; i < gameSeq.length; i++) {
